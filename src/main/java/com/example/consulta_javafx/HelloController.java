@@ -64,14 +64,13 @@ public class HelloController {
         String codigo = codigoField.getText();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM notas WHERE codigo = ?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM notas WHERE codigo = ?   ");
 
             pstmt.setInt(1, Integer.parseInt(codigo));
 
             ResultSet resultSet = pstmt.executeQuery();
 
             if (resultSet.next()) {
-                // Encontrado: puedes hacer algo con los datos del resultado si es necesario
                 int codigoEncontrado = resultSet.getInt("Codigo");
                 String nombre = resultSet.getString("Nombre");
                 String carrera = resultSet.getString("Carrera");
