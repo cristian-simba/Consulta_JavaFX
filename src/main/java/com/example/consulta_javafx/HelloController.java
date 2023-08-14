@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 
 
 public class HelloController {
@@ -20,7 +21,7 @@ public class HelloController {
     private TextField notaField;
     static final String DB_URL="jdbc:mysql://localhost/Crud";
     static final String USER="root";
-    static final String PASS="root_bas3";
+    static final String PASS="root";
     static final String QUERY="Select * From notas ;";
 
     @FXML
@@ -60,11 +61,66 @@ public class HelloController {
     }
 
     public void buscarBt(ActionEvent event) {
-        System.out.println("Sirve el Buscar");
+        String codigo = codigoField.getText();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM notas WHERE codigo = ?");
+
+            pstmt.setInt(1, Integer.parseInt(codigo));
+
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                // Encontrado: puedes hacer algo con los datos del resultado si es necesario
+                int codigoEncontrado = resultSet.getInt("Codigo");
+                String nombre = resultSet.getString("Nombre");
+                String carrera = resultSet.getString("Carrera");
+                int nota = resultSet.getInt("NotaF");
+
+                String mensaje = "Código: " + codigoEncontrado + "\nNombre: " + nombre + "\nCarrera: " + carrera + "\nNota: " + nota;
+                showAlert(mensaje, Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("No se encontró ningún registro con el código proporcionado.", Alert.AlertType.WARNING);
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("No se encontro ningun registro.", Alert.AlertType.ERROR);
+        }
     }
 
     public void actualizarBt(ActionEvent event) {
-        System.out.println("Sirve el Actualizar");
+        String codigo = codigoField.getText(); // Obtén el código desde algún lugar
+        String nuevoNombre = nombreField.getText(); // Obtén el nuevo nombre desde algún lugar
+        String nuevaCarrera = carreraField.getText(); // Obtén la nueva carrera desde algún lugar
+        int nuevaNota = Integer.parseInt(notaField.getText()); // Obtén la nueva nota desde algún lugar
+
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            String query = "UPDATE notas SET Nombre = ?, Carrera = ?, NotaF = ? WHERE Codigo = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+
+            pstmt.setString(1, nuevoNombre);
+            pstmt.setString(2, nuevaCarrera);
+            pstmt.setInt(3, nuevaNota);
+            pstmt.setInt(4, Integer.parseInt(codigo));
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                showAlert("Datos actualizados correctamente.", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("No se encontró ningún registro con el código proporcionado.", Alert.AlertType.WARNING);
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error al actualizar los datos.", Alert.AlertType.ERROR);
+        }
     }
 
     public void borrarBt(ActionEvent event) {
