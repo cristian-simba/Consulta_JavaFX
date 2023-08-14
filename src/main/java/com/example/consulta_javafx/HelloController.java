@@ -92,10 +92,10 @@ public class HelloController {
     }
 
     public void actualizarBt(ActionEvent event) {
-        String codigo = codigoField.getText(); // Obtén el código desde algún lugar
-        String nuevoNombre = nombreField.getText(); // Obtén el nuevo nombre desde algún lugar
-        String nuevaCarrera = carreraField.getText(); // Obtén la nueva carrera desde algún lugar
-        int nuevaNota = Integer.parseInt(notaField.getText()); // Obtén la nueva nota desde algún lugar
+        String codigo = codigoField.getText();
+        String nuevoNombre = nombreField.getText();
+        String nuevaCarrera = carreraField.getText();
+        int nuevaNota = Integer.parseInt(notaField.getText());
 
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -147,5 +147,11 @@ public class HelloController {
             showAlert("Error al eliminar el registro.", Alert.AlertType.ERROR);
         }
     }
-
+    @FXML
+    private void limpiarCampos() {
+        codigoField.clear();
+        nombreField.clear();
+        carreraField.clear();
+        notaField.clear();
     }
+}

@@ -27,4 +27,5 @@
    <Button mnemonicParsing="false" onAction="#buscarBt" prefWidth="320.0" text="Buscar datos por el Código Único" />
    <Button mnemonicParsing="false" onAction="#actualizarBt" prefWidth="320.0" text="Actualizar Datos" />
    <Button mnemonicParsing="false" onAction="#borrarBt" prefWidth="320.0" text="Borrar Datos" />
+   <Button mnemonicParsing="false" onAction="#limpiarCampos" prefWidth="320.0" text="Limpiar Pantalla" />
 </VBox>
